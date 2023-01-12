@@ -172,5 +172,93 @@ Take a moment to explore on the <em>@Repository</em> annotation and Components.
 </li>
 </ul>
 
+<p>Try to recall from the previous exercise and print the beans from the application context
+and see if the beans are created in the application context.</p>
 
+<ul>
+<li><h3>Class-level & Method-level annotations</h3></li>
+<li>You have been using the annotations <em>@Controller</em> and <em>@Repository</em> that are class-level</li>
+<li>Let's try using the method-level annotations and see if Spring is able to take care of the bean creation</li>
+<li>Create method 'returnBean()' that returns a plain object that is to be considered by the Spring as an entity.</li>
+</ul>
+
+<p>
+
+    @Bean
+    public Object returnBean(){
+        return new Object(); 
+    }
+<br/>Verify whether the method <em>returnBean()</em> is present as a bean in the application context. 
+</p>
+
+<p>Now we are completely aware of how to instruct Spring to take care of these beans.</p>
+
+<p>So far, we have learnt how to create these beans and delegate the job of taking care of them to the Spring.
+Lets move on the ways of injecting the dependencies.</p>
+
+<h5> There are mainly 3 ways of Dependency Injection</h5>
+<ul>
+<li>Constructor Injection,</li>
+<li>Setter Injection and</li>
+<li>Field Injection</li>
+</ul>
+
+<p>Lets consider a scenario where the Controller is <em>dependent</em> on the <em>Repository</em>.</p>
+<h3>1. Constructor Injection</h3>
+<p>Let's declare a reference for <em>DroneRepository</em> in the <em>DroneController</em> class which has to be immutable.
+
+    private final DroneRepository droneRepository;
+
+Create a parameterized constructor for the class DroneController.
+
+    public DroneController(DroneRepository droneRepository) {
+        this.droneRepository = droneRepository;
+    }
+
+That's it! Spring is going to implicitly create a dependency between the DroneController and the DroneRepository classes.
+</p>
+
+<h3>2. Setter Injection</h3>
+<p>Let's create a setter method in the <em>DroneController</em> class and replace the constructor and add the 
+<em>@Autowired</em> annotation on top of it.
+
+    @Autowired
+    public void setDroneRepository(DroneRepository droneRepository) {
+        this.droneRepository = droneRepository;
+    }
+to set the value of the DroneRepository reference.
+<br/>
+<img src="hint.gif" height="30px" width="30px"/>
+Remember that you will have to make the <em>DroneRepository</em> reference mutable i.e., make the 'DroneRepository' reference
+not 'final'.
+
+    private DroneRepository droneRepository;
+Take a moment to read about @Autowired annotation.
+
+<h3>Spring Magic!..</h3> 
+Auto wiring feature of spring framework enables you to inject the object dependency implicitly. The dependency 
+injection is automatically taken care of. This is Spring Magic!..
+</p>
+<div align="center"><img src="magic.gif" height="200px" width="300px"/></div>
+
+<h3>3. Field Injection</h3>
+<p>
+Let's ditch the setter method and the constructor for some time and directly add the @Autowired annotation on the 
+'DroneRepository' field directly.
+
+    @Autowired
+    private DroneRepository droneRepository;
+</p>
+<i style="color:red">
+hint : intelliJ would either recommend you to add a constructor parameter or suggest that this way of auto-wiring is 
+not recommended! Uh! Oh!..
+</i>
+<p>But wait a moment!. Is this right to allow anything to set or modify the value of any Java element that has a private 
+access? Let's stick to the basics! Is this even allowed in Java?</p>
+<div align="center"><img src="no.gif" height="170px" width="280px"/></div>
+<p>But Spring is able to create instance and set it because of <em>Reflection</em>. But it's not right as per Java conventions!. 
+Java is strict!.. However, the reference could be initialized with null which could lead to errors.</p>
+<p><img src="hint.gif" height="30px" width="30px"/> &nbsp; Take a moment to read about Spring Reflection.</p>
+
+<p>Because of these reasons <em>Constructor Injection</em> is the recommended way and is used for the win!.. </p>
 </div>
